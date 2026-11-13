@@ -1,0 +1,33 @@
+{
+  "LEVEL_10.title": "Double Boss 1",
+  
+  "LEVEL_11.title": "Ascender's Fatigue",
+  "LEVEL_11.description": "Starting [red]Curse[/red] is more powerful.",
+
+  "LEVEL_12.title": "Lower Max HP 1",
+  "LEVEL_12.description": "Lose 10% of your max hp at the start of Act 1.",
+
+  "LEVEL_13.title": "Lower Max HP 2",
+  "LEVEL_13.description": "Lose 10% of your max hp at the start of Act 2.",
+
+  "LEVEL_14.title": "Lower Max HP 3",
+  "LEVEL_14.description": "Lose 10% of your max hp at the start of Act 3.",
+
+  "LEVEL_15.title": "Empty Chest",
+  "LEVEL_15.description": "The first chest is empty.",
+
+  "LEVEL_16.title": "Double Boss 2",
+  "LEVEL_16.description": "Fight two bosses at the end of Act 2.",
+
+  "LEVEL_17.title": "Double Boss 3",
+  "LEVEL_17.description": "Fight two bosses at the end of Act 1.",
+
+  "LEVEL_18.title": "Triple Boss 1",
+  "LEVEL_18.description": "Fight three bosses at the end of Act 3.",
+  
+  "LEVEL_19.title": "Triple Boss 2",
+  "LEVEL_19.description": "Fight three bosses at the end of Act 2.",
+  
+  "LEVEL_20.title": "Triple Boss 3",
+  "LEVEL_20.description": "Fight three bosses at the end of Act 1."
+}

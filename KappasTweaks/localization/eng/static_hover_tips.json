@@ -1,0 +1,4 @@
+{
+  "TRIPLE_BOSS.title": "{BossName1}, {BossName2} & {BossName3}",
+  "TRIPLE_BOSS.description": "At the end of the act, you will fight {BossName1}, {BossName2} and {BossName3}."
+}

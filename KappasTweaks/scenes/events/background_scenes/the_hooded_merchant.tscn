@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c8mdx21flbgvh"]
+
+[node name="TheHoodedMerchant" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -637.0
+offset_top = -288.0
+offset_right = 1849.0
+offset_bottom = 1280.0
+expand_mode = 1

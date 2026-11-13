@@ -1,0 +1,45 @@
+using BaseLib.Utils;
+using KappasTweaks.KappasTweaksCode.Cards;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.RelicPools;
+
+namespace KappasTweaks.KappasTweaksCode.Relics;
+
+[Pool(typeof(SharedRelicPool))]
+public sealed class Shiganshina : KappasTweaksRelic
+{
+    // HYPER
+    private const int _cardsToAdd = 1;
+    private const string _cardCountKey = "CardCount";
+    private const string _cardName = "CardName";
+
+    public override RelicRarity Rarity => RelicRarity.Ancient;
+
+    public override bool HasUponPickupEffect => true;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new IntVar(_cardCountKey, _cardsToAdd),
+        new StringVar(_cardName, ModelDb.Card<FallenComrades>().Title),
+    ];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromCard<FallenComrades>(),
+    ];
+
+    public override async Task AfterObtained()
+    {
+        for (int i = 0; i < DynamicVars[_cardCountKey].IntValue; i++)
+        {
+            FallenComrades axe = Owner.RunState.CreateCard<FallenComrades>(Owner);
+            CardCmd.PreviewCardPileAdd(await CardPileCmd.Add(axe, PileType.Deck), 2f);
+        }
+
+    }
+}

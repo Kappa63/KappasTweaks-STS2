@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://o7yg816f8jw5"]
+
+[ext_resource type="Texture2D" uid="uid://dlju45dh06maj" path="res://KappasTweaks/src/kappatheancient.png" id="1_7ciwh"]
+
+[node name="Kappatheancient" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -321.0
+offset_top = -52.0
+offset_right = 2239.0
+offset_bottom = 1148.0
+texture = ExtResource("1_7ciwh")

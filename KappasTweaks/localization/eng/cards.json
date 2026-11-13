@@ -1,0 +1,21 @@
+{
+  "MIND_ROT.title": "Brain Rot",
+
+  "KAPPASTWEAKS-HERES_JOHNNY.description": "If this is in your [gold]Hand[/gold], it must be played before other cards.",
+  "KAPPASTWEAKS-HERES_JOHNNY.title": "Here's Johnny",
+
+  "KAPPASTWEAKS-JOHNNYS_AXE.description": "Deal {Damage:diff()} damage.\nDraw [blue]{Cards}[/blue] {Cards:plural:card|cards}.\n{AxeChance}% chance to add [purple]{CurseName}[/purple].",
+  "KAPPASTWEAKS-JOHNNYS_AXE.title": "Johnny's Axe",
+
+  "KAPPASTWEAKS-RECURSION.description": "[gold]Evoke[/gold] your next Orb. \n[gold]Channel[/gold] the Orb that was just Evoked.",
+  "KAPPASTWEAKS-RECURSION.title": "Recursion",
+
+  "KAPPASTWEAKS-FALLEN_COMRADES.description": "Gain [blue]{PowerAmount}[/blue] [purple]{PowerName}[/purple]. \nIncrease this amount by [blue]{PowerAmountIncreaseBy}[/blue] whenever ANYONE dies.",
+  "KAPPASTWEAKS-FALLEN_COMRADES.title": "Fallen Comrades",
+
+  "KAPPASTWEAKS-POLYMERIZATION.description": "Play [gold]{CardA}[/gold] and [gold]{CardB}[/gold].",
+  "KAPPASTWEAKS-POLYMERIZATION.title": "Polymerization",
+
+  "KAPPASTWEAKS-ASCENDERS_FATIGUE.description": "Whenever this is drawn, lose [blue]{StrengthPower}[/blue] [gold]Strength[/gold] and [blue]{DexterityPower}[/blue] [gold]Dexterity[/gold] this turn.",
+  "KAPPASTWEAKS-ASCENDERS_FATIGUE.title": "Ascender's Fatigue"
+}

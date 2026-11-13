@@ -1,0 +1,6 @@
+{
+  "KAPPASTWEAKS-WANNA_SEE_ME_DO_IT_AGAIN.title": "Wanna See Me Do It Again?",
+  "KAPPASTWEAKS-WANNA_SEE_ME_DO_IT_AGAIN.description": "After playing this card [blue]{Plays}[/blue] times, it gains [gold]Replay[/gold] [blue]{Times}[/blue].",
+  "KAPPASTWEAKS-ONE_MORE_TIME.title": "One More Time",
+  "KAPPASTWEAKS-ONE_MORE_TIME.description": "Every [blue]{Fatals}[/blue] {Fatals:plural:time|times} this card is fatal, it PERMANENTLY gains [gold]Replay[/gold] [blue]{ReplayAdd}[/blue]."
+}

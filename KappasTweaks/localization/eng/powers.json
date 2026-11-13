@@ -1,0 +1,8 @@
+{
+  "KAPPASTWEAKS-MODE_SHIFT.title": "Mode Shift",
+  "KAPPASTWEAKS-MODE_SHIFT.description": "After losing [blue]{Amount}[/blue] HP, the Guardian gains [gold]Block[/gold] and switches to [gold]Defensive Mode[/gold].",
+  "KAPPASTWEAKS-MODE_SHIFT.smartDescription": "After losing [blue]{Amount}[/blue] HP, the Guardian gains [gold]Block[/gold] and switches to [gold]Defensive Mode[/gold].",
+  "KAPPASTWEAKS-SHARP_HIDE.title": "Sharp Hide",
+  "KAPPASTWEAKS-SHARP_HIDE.description": "Whenever you play an [gold]Attack[/gold], take [blue]{Amount}[/blue] damage.",
+  "KAPPASTWEAKS-SHARP_HIDE.smartDescription": "Whenever you play an [gold]Attack[/gold], take [blue]{Amount}[/blue] damage."
+}

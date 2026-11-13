@@ -1,0 +1,51 @@
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.RelicPools;
+
+// HYPER
+using TargetEnchantment = KappasTweaks.KappasTweaksCode.Enchantments.WannaSeeMeDoItAgain;
+
+namespace KappasTweaks.KappasTweaksCode.Relics;
+
+[Pool(typeof(SharedRelicPool))]
+public sealed class ForTheWorthy : KappasTweaksRelic
+{
+    // HYPER
+    private const int _cardsToRemove = 5;
+    private const int _cardsToEnchant = 1;
+    private const int _enchantAmount = 1;
+    private const string _enchantCardsKey = "EnchantCards";
+    private const string _enchantmentKey = "EnchantmentName";
+
+    public override RelicRarity Rarity => RelicRarity.Event;
+    public override bool HasUponPickupEffect => true;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new CardsVar(_cardsToRemove),
+        new IntVar(_enchantCardsKey, _cardsToEnchant),
+        new StringVar(_enchantmentKey, ModelDb.Enchantment<TargetEnchantment>().Title.GetFormattedText()),
+    ];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => HoverTipFactory.FromEnchantment<TargetEnchantment>(_enchantAmount);
+
+    public override async Task AfterObtained()
+    {
+        CardSelectorPrefs removalPrefs = new(CardSelectorPrefs.RemoveSelectionPrompt, DynamicVars.Cards.IntValue);
+        foreach (CardModel card in await CardSelectCmd.FromDeckForRemoval(Owner, removalPrefs))
+            await CardPileCmd.RemoveFromDeck(card);
+
+        CardSelectorPrefs enchantPrefs = new(CardSelectorPrefs.EnchantSelectionPrompt, DynamicVars[_enchantCardsKey].IntValue);
+        foreach (CardModel card in await CardSelectCmd.FromDeckForEnchantment(
+                     Owner, ModelDb.Enchantment<TargetEnchantment>(), _enchantAmount, enchantPrefs))
+        {
+            CardCmd.Enchant<TargetEnchantment>(card, _enchantAmount);
+            CardCmd.Preview(card);
+        }
+    }
+}

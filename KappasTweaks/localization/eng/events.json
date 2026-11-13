@@ -1,0 +1,13 @@
+{
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.title": "The Hooded Merchant",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.description": "A hooded figure sits behind a crooked table, three offerings laid out before him. He says nothing. He only grins.",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.options.ENCHANT.title": "For The Worthy",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.options.ENCHANT.description": "[gold]Enchant[/gold] a card with [purple]{EnchantmentName}[/purple].",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.options.ENCORE.title": "For The Hungry",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.options.ENCORE.description": "[gold]Enchant[/gold] an [gold]Attack[/gold] with [purple]{AttackEnchantmentName}[/purple].",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.options.HEAL.title": "For The Cowards",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.INITIAL.options.HEAL.description": "Heal [blue]{Heal}[/blue] HP.",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.ENCHANT.description": "The card hums in your hand. The merchant nods, as if you passed a test you didn't know you were taking.",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.ENCORE.description": "The merchant grins wider. [red]\"IT EATS,\"[/red] he says. [red]\"AND THEN IT EATS AGAIN.\"[/red]",
+  "KAPPASTWEAKS-THE_HOODED_MERCHANT.pages.HEAL.description": "[red]\"COWARD.\"[/red]"
+}
