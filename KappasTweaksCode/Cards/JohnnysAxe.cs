@@ -77,6 +77,7 @@ public class JohnnysAxe() : KappasTweaksCard(0,
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        
         // this.DynamicVars[_axeChanceKey].UpgradeValueBy(_axePercentUpgrade);
     }
 }
