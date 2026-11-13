@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Runs;
+using MegaCrit.Sts2.Core.Unlocks;
 
 namespace KappasTweaks.KappasTweaksCode.Ascensions;
 
@@ -15,7 +16,7 @@ internal static class DoubleBossThree
     internal const AscensionLevel Ascension = (AscensionLevel)Level;
 }
 
-[HarmonyPatch(typeof(ActModel), nameof(ActModel.GenerateRooms))]
+[HarmonyPatch(typeof(ActModel), nameof(ActModel.GenerateRooms), [typeof(Rng), typeof(UnlockState), typeof(bool), typeof(bool)])]
 internal static class DoubleBossThreeRoomsPatch
 {
     [HarmonyPostfix]
