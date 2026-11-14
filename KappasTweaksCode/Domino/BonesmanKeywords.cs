@@ -10,4 +10,7 @@ public static class BonesmanKeywords
 
     [CustomEnum, KeywordProperties(AutoKeywordPosition.Before)]
     public static CardKeyword Jumbled;
+
+    [CustomEnum, KeywordProperties(AutoKeywordPosition.Before)]
+    public static CardKeyword Loose;
 }

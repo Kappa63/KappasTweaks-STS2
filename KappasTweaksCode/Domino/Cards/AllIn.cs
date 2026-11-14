@@ -9,29 +9,30 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace KappasTweaks.KappasTweaksCode.Domino.Cards;
 
 [Pool(typeof(BonesmanCardPool))]
-public sealed class Rattle() : BonesmanCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public sealed class AllIn() : BonesmanCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     // HYPER
-    private const int _damage = 4;
-    private const int _damageUpgrade = 1;
-    private const int _hits = 2;
-    private const int _bonusHits = 1;
+    private const int _per = 3;
+    private const int _perUpgrade = -1;
 
-    protected override (int Left, int Right)? FixedPips => (2, 3);
+    protected override bool IsDomino => false;
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonusHits),
+        new IntVar(BonusKey, _per),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue, _hits + (chained ? (int)Bonus : 0));
+        int energy = (Chain.Of(Owner)?.Links ?? 0) / (int)Bonus;
+        if (energy > 0)
+            await PlayerCmd.GainEnergy(energy, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        DynamicVars[BonusKey].UpgradeValueBy(_perUpgrade);
     }
 }

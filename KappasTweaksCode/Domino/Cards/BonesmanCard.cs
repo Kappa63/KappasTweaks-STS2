@@ -1,4 +1,5 @@
 using KappasTweaks.KappasTweaksCode.Cards;
+using KappasTweaks.KappasTweaksCode.Domino.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -31,6 +32,10 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
     protected virtual IEnumerable<IHoverTip> CardHoverTips => [];
 
     private bool IsJumbled => CanonicalKeywords.Contains(BonesmanKeywords.Jumbled);
+    private int Tolerance => CanonicalKeywords.Contains(BonesmanKeywords.Loose) || Owner.Creature.GetPower<LooseBonesPower>() != null ? 1 : 0;
+    private bool AlwaysChains => Owner.Creature.GetPower<BoneyardKingPower>() != null;
+
+    protected ChainOutcome Outcome { get; private set; }
     private bool HasPips => _pipLeft != _unset;
 
     [SavedProperty]
@@ -67,7 +72,7 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
         IsDomino ? [..CardHoverTips, HoverTipFactory.FromKeyword(BonesmanKeywords.Chained)] : CardHoverTips;
 
     protected override bool ShouldGlowGoldInternal =>
-        IsDomino && PipLeft != _unset && Chain.Of(Owner)?.CanChain(PipLeft, PipRight) == true;
+        IsDomino && PipLeft != _unset && Chain.Of(Owner)?.CanChain(PipLeft, PipRight, Tolerance, AlwaysChains) == true;
 
     public override void AfterCreated()
     {
@@ -85,17 +90,32 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
 
     protected sealed override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        bool chained = false;
+        Outcome = ChainOutcome.Started;
         if (IsDomino)
         {
             if (PipLeft == _unset)
                 Roll(Owner.RunState.Rng.CombatCardGeneration);
-            chained = (await Chain.Ensure(choiceContext, Owner)).Place(PipLeft, PipRight);
+            Outcome = (await Chain.Ensure(choiceContext, Owner)).Place(PipLeft, PipRight, Tolerance, AlwaysChains);
         }
-        await OnDominoPlay(choiceContext, play, chained);
+        await OnDominoPlay(choiceContext, play, Outcome == ChainOutcome.Chained);
+
+        if (Outcome == ChainOutcome.Started)
+            return;
+        List<IChainListener> listeners = [..Owner.Creature.Powers.OfType<IChainListener>(), ..Owner.Relics.OfType<IChainListener>()];
+        foreach (IChainListener listener in listeners)
+        {
+            if (Outcome == ChainOutcome.Chained) await listener.OnChained(choiceContext, this);
+            else await listener.OnChainBroken(choiceContext, this);
+        }
     }
 
     protected abstract Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained);
+
+    internal void Reroll()
+    {
+        if (IsDomino && FixedPips == null)
+            Roll(Owner.RunState.Rng.CombatCardGeneration);
+    }
 
     protected void Roll(Rng rng)
     {

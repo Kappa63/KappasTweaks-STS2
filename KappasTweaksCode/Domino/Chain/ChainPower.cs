@@ -1,9 +1,24 @@
 using KappasTweaks.KappasTweaksCode.Powers;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace KappasTweaks.KappasTweaksCode.Domino;
+
+public enum ChainOutcome
+{
+    Started,
+    Chained,
+    Broke,
+}
+
+// Powers and relics implementing this hear about every domino their owner plays.
+public interface IChainListener
+{
+    Task OnChained(PlayerChoiceContext context, Cards.BonesmanCard card) => Task.CompletedTask;
+    Task OnChainBroken(PlayerChoiceContext context, Cards.BonesmanCard card) => Task.CompletedTask;
+}
 
 // Holds a player's open ends and how many dominoes in a row have Chained. Lives for the combat, so ends persist
 // between turns.
@@ -19,6 +34,7 @@ public sealed class ChainPower : KappasTweaksPower
     private int _left = -1;
     private int _right = -1;
     private int _links;
+    private int _linksThisTurn;
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -30,30 +46,33 @@ public sealed class ChainPower : KappasTweaksPower
     public int Left => _left;
     public int Right => _right;
     public int Links => _links;
+    public int LinksThisTurn => _linksThisTurn;
 
-    public bool CanChain(int a, int b) => HasEnds && FindLink(a, b) != null;
+    public bool CanChain(int a, int b, int tolerance = 0, bool always = false) =>
+        HasEnds && (always || FindLink(a, b, tolerance) != null);
 
-    // Returns whether the domino Chained. With no ends yet it just starts the chain.
-    public bool Place(int a, int b)
+    public ChainOutcome Place(int a, int b, int tolerance = 0, bool always = false)
     {
         if (!HasEnds)
         {
             SetEnds(a, b);
-            return false;
+            return ChainOutcome.Started;
         }
 
-        if (FindLink(a, b) is not var (leftEnd, other))
+        (bool LeftEnd, int Other)? link = FindLink(a, b, tolerance) ?? (always ? (true, b) : null);
+        if (link is not var (leftEnd, other))
         {
             _links = 0;
             SetEnds(a, b);
-            return false;
+            return ChainOutcome.Broke;
         }
 
         if (leftEnd) _left = other;
         else _right = other;
         _links++;
+        _linksThisTurn++;
         Refresh();
-        return true;
+        return ChainOutcome.Chained;
     }
 
     public void SetEnds(int left, int right)
@@ -63,21 +82,38 @@ public sealed class ChainPower : KappasTweaksPower
         Refresh();
     }
 
-    // Exact matches win over blanks, so a wild end isn't spent when a real one fits.
-    private (bool LeftEnd, int Other)? FindLink(int a, int b)
+    public void ResetLinks()
     {
-        foreach (bool exact in new[] { true, false })
+        _links = 0;
+        Refresh();
+    }
+
+    public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    {
+        if (player == Owner.Player)
+            _linksThisTurn = 0;
+        return Task.CompletedTask;
+    }
+
+    // Exact matches win over blanks, and blanks over near-misses, so the most flexible end is spent last.
+    private (bool LeftEnd, int Other)? FindLink(int a, int b, int tolerance)
+    {
+        for (int pass = 0; pass < 3; pass++)
         foreach (bool leftEnd in new[] { true, false })
         {
             int end = leftEnd ? _left : _right;
-            if (Fits(end, a, exact)) return (leftEnd, b);
-            if (Fits(end, b, exact)) return (leftEnd, a);
+            if (Fits(end, a, pass, tolerance)) return (leftEnd, b);
+            if (Fits(end, b, pass, tolerance)) return (leftEnd, a);
         }
         return null;
     }
 
-    private static bool Fits(int end, int pip, bool exact) =>
-        exact ? end == pip : end == Blank || pip == Blank;
+    private static bool Fits(int end, int pip, int pass, int tolerance) => pass switch
+    {
+        0 => end == pip,
+        1 => end == Blank || pip == Blank,
+        _ => Math.Abs(end - pip) <= tolerance,
+    };
 
     private void Refresh()
     {
