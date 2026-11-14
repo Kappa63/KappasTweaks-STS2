@@ -13,13 +13,22 @@ using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace KappasTweaks.KappasTweaksCode.Relics;
 
+// Built only on game hooks plus a field write. Harmony patches on tiny methods like AttackCommand.Targeting can be
+// skipped once the runtime inlines them, and in multiplayer that skip happens on one machine but not the other.
 [Pool(typeof(SharedRelicPool))]
 public sealed class FirstBlood : KappasTweaksRelic
 {
     public override RelicRarity Rarity => RelicRarity.Ancient;
 
+    private static readonly AccessTools.FieldRef<AttackCommand, Creature?> _singleTarget =
+        AccessTools.FieldRefAccess<AttackCommand, Creature?>("_singleTarget");
+
+    private static readonly AccessTools.FieldRef<AttackCommand, ICombatState?> _opponentsOf =
+        AccessTools.FieldRefAccess<AttackCommand, ICombatState?>("_combatState");
+
     private bool _spentThisCombat;
     private bool _redirecting;
+    private bool _fanningOut;
     private CardPlay? _firstAttackPlay;
 
     [SavedProperty]
@@ -33,12 +42,11 @@ public sealed class FirstBlood : KappasTweaksRelic
         }
     }
 
-    // True only between BeforeCardPlayed and AfterCardPlayed of the first attack -- i.e. while that card's
-    // OnPlay runs. Both patches key off it, so the whole card (damage AND its debuffs) hits every enemy.
-    internal bool Redirecting
+    // True only while the first attack's OnPlay runs, so the whole card (damage AND its debuffs) hits every enemy.
+    private bool Redirecting
     {
         get => _redirecting;
-        private set
+        set
         {
             AssertMutable();
             _redirecting = value;
@@ -69,82 +77,38 @@ public sealed class FirstBlood : KappasTweaksRelic
     {
         if (ReferenceEquals(cardPlay, _firstAttackPlay))
             Redirecting = false;
-
         return Task.CompletedTask;
     }
-}
 
-[HarmonyPatch(typeof(AttackCommand), nameof(AttackCommand.Targeting))]
-internal static class FirstBloodTargetingPatch
-{
-    [HarmonyPrefix]
-    private static bool RedirectToEveryEnemy(AttackCommand __instance, Creature target, ref AttackCommand __result)
+    // Fires before the attack picks its targets, and every hit re-reads them, so retargeting here covers all hits.
+    public override Task BeforeAttack(AttackCommand command)
     {
-        if (__instance.ModelSource is not CardModel card)
-            return true;
-
-        if (__instance.CardPlay == null || __instance.Attacker == null)
-            return true;
-
-        if (target.Side != CombatSide.Enemy)
-            return true;
-
-        ICombatState? combatState = card.CombatState;
-        if (combatState == null)
-            return true;
-
-        FirstBlood? relic = card.Owner.GetRelic<FirstBlood>();
-        if (relic == null || !relic.Redirecting)
-            return true;
-
-        __result = __instance.TargetingAllOpponents(combatState);
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(PowerCmd), nameof(PowerCmd.Apply),
-    new[]
-    {
-        typeof(PlayerChoiceContext), typeof(PowerModel), typeof(Creature), typeof(decimal), typeof(Creature),
-        typeof(CardModel), typeof(bool),
-    })]
-internal static class FirstBloodPowerPatch
-{
-    // Combat is sequential on one thread, so a plain flag is enough to stop the fan-out re-entering itself.
-    private static bool _fanningOut;
-
-    [HarmonyPrefix]
-    private static bool FanToEveryEnemy(PlayerChoiceContext choiceContext, PowerModel power, Creature target,
-        decimal amount, Creature? applier, CardModel? cardSource, bool silent, ref Task __result)
-    {
-        if (_fanningOut || target.Side != CombatSide.Enemy)
-            return true;
-
-        FirstBlood? relic = cardSource?.Owner?.GetRelic<FirstBlood>();
-        if (relic == null || !relic.Redirecting)
-            return true;
-
-        __result = FanOut(choiceContext, power, target, amount, applier, cardSource, silent);
-        return false;
+        if (Redirecting && command.ModelSource is CardModel card && card.Owner == Owner && card.CombatState is { } combat
+            && _singleTarget(command) is { Side: CombatSide.Enemy })
+        {
+            _singleTarget(command) = null;
+            _opponentsOf(command) = combat;
+        }
+        return Task.CompletedTask;
     }
 
-    // The passed power was a blank fresh clone for the single target; discard it and give each enemy its own
-    // (a power instance belongs to one creature). Apply handles new-vs-stacking per enemy internally.
-    private static async Task FanOut(PlayerChoiceContext choiceContext, PowerModel power, Creature target,
-        decimal amount, Creature? applier, CardModel? cardSource, bool silent)
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power,
+        decimal amount, Creature? applier, CardModel? cardSource)
     {
+        if (!Redirecting || _fanningOut || amount <= 0 || cardSource?.Owner != Owner
+            || power.Owner is not { Side: CombatSide.Enemy } target || target.CombatState is not { } combat)
+        {
+            return;
+        }
+
+        // A power instance belongs to one creature, so each other enemy gets a fresh copy.
         _fanningOut = true;
         try
         {
-            ICombatState? combatState = target.CombatState;
-            if (combatState == null)
-                return;
-
-            foreach (Creature enemy in combatState.HittableEnemies.ToList())
+            foreach (Creature enemy in combat.HittableEnemies.Where(e => e != target).ToList())
             {
-                PowerModel? fresh = ModelDb.GetByIdOrNull<PowerModel>(power.Id)?.ToMutable();
-                if (fresh != null)
-                    await PowerCmd.Apply(choiceContext, fresh, enemy, amount, applier, cardSource, silent);
+                if (ModelDb.GetByIdOrNull<PowerModel>(power.Id)?.ToMutable() is { } fresh)
+                    await PowerCmd.Apply(choiceContext, fresh, enemy, amount, applier, cardSource);
             }
         }
         finally

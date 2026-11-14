@@ -2,6 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.DevConsole.ConsoleCommands;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves;
 using MegaCrit.Sts2.Core.Saves.Managers;
 
@@ -106,5 +107,21 @@ internal static class AscensionUnlockCmdPatch
 
         foreach (CharacterModel character in ModelDb.AllCharacters)
             progress.GetOrCreateCharacterStats(character.Id).MaxAscension = KappasTweaksAscension.MaxLevel;
+    }
+}
+
+// Loading a run clamps its ascension to 10 (v0.113), so a saved A11+ run came back as A10 and lost its triple bosses.
+// Restore the saved level as-is: the run was created with it, and the private mod's levels go above this mod's max.
+[HarmonyPatch(typeof(RunState), nameof(RunState.FromSerializable))]
+internal static class AscensionRunLoadPatch
+{
+    private static readonly AccessTools.FieldRef<RunState, int> _ascensionLevel =
+        AccessTools.FieldRefAccess<RunState, int>("<AscensionLevel>k__BackingField");
+
+    [HarmonyPostfix]
+    private static void KeepSavedLevel(SerializableRun save, RunState __result)
+    {
+        if (save.GameMode != GameMode.Blitz && save.Ascension > __result.AscensionLevel)
+            _ascensionLevel(__result) = save.Ascension;
     }
 }
