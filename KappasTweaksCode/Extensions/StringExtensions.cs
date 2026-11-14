@@ -64,16 +64,6 @@ public static class StringExtensions
         return Path.Join(MainFile.ResPath, "images", "relics", "relic.png");
     }
     
-    // No fallback: EnchantmentModel.Icon loads this with no existence check, so pointing at a placeholder
-    // that may not exist just moves the crash onto a filename that isn't the one you forgot.
-    public static string EnchantmentImagePath(this string path)
-    {
-        path = Path.Join(MainFile.ResPath, "images", "enchantments", path);
-        if (!ResourceLoader.Exists(path))
-            MainFile.Logger.Info("Could not find enchantment image path: " + path);
-
-        return path;
-    }
 
     public static string BigRelicImagePath(this string path)
     {

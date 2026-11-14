@@ -1,5 +1,7 @@
 using BaseLib.Abstracts;
+using BaseLib.Extensions;
 using KappasTweaks.KappasTweaksCode.Cards;
+using KappasTweaks.KappasTweaksCode.Extensions;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 
@@ -12,7 +14,6 @@ public sealed class AscendersFatigueDexterity : TemporaryDexterityPower, ICustom
 
     protected override bool IsPositive => false;
 
-    // public string? CustomPackedIconPath => ModelDb.Power<DexterityPower>().PackedIconPath;
-    //
-    // public string? CustomBigIconPath => ModelDb.Power<DexterityPower>().ResolvedBigIconPath;
+    public string? CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
+    public string? CustomBigIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".BigPowerImagePath();
 }

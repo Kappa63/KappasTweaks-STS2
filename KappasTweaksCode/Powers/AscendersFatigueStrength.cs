@@ -1,5 +1,7 @@
 using BaseLib.Abstracts;
+using BaseLib.Extensions;
 using KappasTweaks.KappasTweaksCode.Cards;
+using KappasTweaks.KappasTweaksCode.Extensions;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 
@@ -14,8 +16,6 @@ public sealed class AscendersFatigueStrength : TemporaryStrengthPower, ICustomPo
 
     protected override bool IsPositive => false;
 
-    // Borrow the base game's Strength art; this is a Strength debuff, and it saves shipping an icon.
-    // public string? CustomPackedIconPath => ModelDb.Power<StrengthPower>().PackedIconPath;
-    //
-    // public string? CustomBigIconPath => ModelDb.Power<StrengthPower>().ResolvedBigIconPath;
+    public string? CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
+    public string? CustomBigIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".BigPowerImagePath();
 }

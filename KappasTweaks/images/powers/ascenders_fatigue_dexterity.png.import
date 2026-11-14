@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nukx8yporj8j"
-path="res://.godot/imported/one_more_time.png-d63147fa2ca2e309241a84f84251dc83.ctex"
+uid="uid://cknia8hhufyq7"
+path="res://.godot/imported/ascenders_fatigue_dexterity.png-f701de8897f1ceb8643f43ee94fddf91.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://KappasTweaks/images/enchantments/one_more_time.png"
-dest_files=["res://.godot/imported/one_more_time.png-d63147fa2ca2e309241a84f84251dc83.ctex"]
+source_file="res://KappasTweaks/images/powers/ascenders_fatigue_dexterity.png"
+dest_files=["res://.godot/imported/ascenders_fatigue_dexterity.png-f701de8897f1ceb8643f43ee94fddf91.ctex"]
 
 [params]
 
