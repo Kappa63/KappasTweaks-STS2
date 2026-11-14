@@ -1,7 +1,12 @@
 {
   "KAPPASTWEAKS-BROKEN_NUKE.title": "Broken Nuke",
   "KAPPASTWEAKS-BROKEN_NUKE.description": "[blue]{ProcPercentage}%[/blue] chance to deal [blue]{Damage}[/blue] damage to ALL enemies. Otherwise, nothing happens.",
-
   "KAPPASTWEAKS-SMOKE_BOMB.title": "Smoke Bomb",
-  "KAPPASTWEAKS-SMOKE_BOMB.description": "Escape from a non-[gold]Boss[/gold] [gold]Combat[/gold]. Receive no rewards."
+  "KAPPASTWEAKS-SMOKE_BOMB.description": "Escape from a non-[gold]Boss[/gold] [gold]Combat[/gold]. Receive no rewards.",
+  "KAPPASTWEAKS-LIQUID_MARROW.title": "Liquid Marrow",
+  "KAPPASTWEAKS-LIQUID_MARROW.description": "Gain [blue]{PerLink}[/blue] [gold]Block[/gold] for each domino in your [gold]Chain[/gold] (at least {Block}).",
+  "KAPPASTWEAKS-BOTTLED_BLANK.title": "Bottled Blank",
+  "KAPPASTWEAKS-BOTTLED_BLANK.description": "Your open ends become [gold]0 | 0[/gold].\nDraw {Cards} cards.",
+  "KAPPASTWEAKS-SNAKE_OIL.title": "Snake Oil",
+  "KAPPASTWEAKS-SNAKE_OIL.description": "This turn, the next [blue]{Chains}[/blue] dominoes that would break the chain [gold]Chain[/gold] instead."
 }

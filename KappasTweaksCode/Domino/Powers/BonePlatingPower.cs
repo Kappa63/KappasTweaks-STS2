@@ -11,7 +11,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KappasTweaks.KappasTweaksCode.Domino.Powers;
 
-public sealed class BonePlatingPower : KappasTweaksPower, IChainListener
+public sealed class BonePlatingPower : BonesmanPower, IChainListener
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

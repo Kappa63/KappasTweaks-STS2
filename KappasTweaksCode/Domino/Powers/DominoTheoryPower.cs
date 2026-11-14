@@ -11,7 +11,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KappasTweaks.KappasTweaksCode.Domino.Powers;
 
-public sealed class DominoTheoryPower : KappasTweaksPower, IChainListener
+public sealed class DominoTheoryPower : BonesmanPower, IChainListener
 {
     // HYPER
     private const int _linksNeeded = 3;

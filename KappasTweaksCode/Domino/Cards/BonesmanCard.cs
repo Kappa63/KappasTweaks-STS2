@@ -1,3 +1,4 @@
+using BaseLib.Extensions;
 using KappasTweaks.KappasTweaksCode.Cards;
 using KappasTweaks.KappasTweaksCode.Domino.Powers;
 using MegaCrit.Sts2.Core.Commands;
@@ -37,6 +38,9 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
 
     protected ChainOutcome Outcome { get; private set; }
     private bool HasPips => _pipLeft != _unset;
+    public bool Domino => IsDomino;
+    public bool IsDouble => PipLeft >= 0 && PipLeft == PipRight;
+    public bool HasBlank => PipLeft == ChainPower.Blank || PipRight == ChainPower.Blank;
 
     [SavedProperty]
     public int PipLeft
@@ -65,6 +69,10 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
     protected int PipTotal => Math.Max(PipLeft, 0) + Math.Max(PipRight, 0);
 
     private string PipText => !IsDomino ? "" : PipLeft == _unset ? "? | ?" : $"{PipLeft} | {PipRight}";
+
+    protected virtual string ArtName => Id.Entry.RemovePrefix().ToLowerInvariant();
+    public override string PortraitPath => BonesmanArt.Portrait(ArtName, GetType().Name, big: false);
+    public override string CustomPortraitPath => BonesmanArt.Portrait(ArtName, GetType().Name, big: true);
 
     protected sealed override IEnumerable<DynamicVar> CanonicalVars => [..CardVars, new StringVar(PipsKey, PipText)];
 
@@ -95,17 +103,26 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
         {
             if (PipLeft == _unset)
                 Roll(Owner.RunState.Rng.CombatCardGeneration);
-            Outcome = (await Chain.Ensure(choiceContext, Owner)).Place(PipLeft, PipRight, Tolerance, AlwaysChains);
+            ChainPower chain = await Chain.Ensure(choiceContext, Owner);
+            // A forced chain spends a Perfect Match before a Safety Net; Boneyard King forces for free.
+            PowerModel? rescue = !chain.HasEnds || chain.CanChain(PipLeft, PipRight, Tolerance, AlwaysChains)
+                ? null
+                : Owner.Creature.GetPower<PerfectMatchPower>() as PowerModel ?? Owner.Creature.GetPower<SafetyNetPower>();
+            Outcome = chain.Place(PipLeft, PipRight, Tolerance, AlwaysChains || rescue != null,
+                Owner.Creature.GetPower<EndlessChainPower>() != null);
+            if (rescue != null)
+                await PowerCmd.Decrement(rescue);
         }
         await OnDominoPlay(choiceContext, play, Outcome == ChainOutcome.Chained);
 
-        if (Outcome == ChainOutcome.Started)
+        if (!IsDomino)
             return;
         List<IChainListener> listeners = [..Owner.Creature.Powers.OfType<IChainListener>(), ..Owner.Relics.OfType<IChainListener>()];
         foreach (IChainListener listener in listeners)
         {
+            await listener.OnDominoPlayed(choiceContext, this);
             if (Outcome == ChainOutcome.Chained) await listener.OnChained(choiceContext, this);
-            else await listener.OnChainBroken(choiceContext, this);
+            else if (Outcome == ChainOutcome.Broke) await listener.OnChainBroken(choiceContext, this);
         }
     }
 
@@ -119,8 +136,12 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
 
     protected void Roll(Rng rng)
     {
-        PipLeft = rng.NextInt(ChainPower.Blank, ChainPower.MaxPip + 1);
-        PipRight = rng.NextInt(ChainPower.Blank, ChainPower.MaxPip + 1);
+        int left = rng.NextInt(ChainPower.Blank, ChainPower.MaxPip + 1);
+        int right = rng.NextInt(ChainPower.Blank, ChainPower.MaxPip + 1);
+        if (Owner.Creature.GetPower<WeightedDicePower>() != null && Chain.Of(Owner) is { HasEnds: true } chain)
+            left = rng.NextInt(2) == 0 ? chain.Left : chain.Right;
+        PipLeft = left;
+        PipRight = right;
     }
 
     protected virtual void OnPipsChanged()

@@ -1,5 +1,4 @@
 using BaseLib.Utils;
-using KappasTweaks.KappasTweaksCode.Extensions;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
@@ -33,8 +32,7 @@ public sealed class ChippedTile() : BonesmanCard(1, CardType.Attack, CardRarity.
         }
     }
 
-    public override string PortraitPath => $"{Stage}_tile.png".CardImagePath();
-    public override string CustomPortraitPath => $"{Stage}_tile.png".BigCardImagePath();
+    protected override string ArtName => $"{Stage}_tile";
 
     protected override (int Left, int Right)? FixedPips => (0, 0);
 

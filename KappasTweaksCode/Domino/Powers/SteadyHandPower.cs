@@ -11,7 +11,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KappasTweaks.KappasTweaksCode.Domino.Powers;
 
-public sealed class SteadyHandPower : KappasTweaksPower
+public sealed class SteadyHandPower : BonesmanPower
 {
     // HYPER
     private const int _linksNeeded = 3;

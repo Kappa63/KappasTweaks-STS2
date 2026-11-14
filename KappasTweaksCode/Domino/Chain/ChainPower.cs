@@ -18,6 +18,7 @@ public interface IChainListener
 {
     Task OnChained(PlayerChoiceContext context, Cards.BonesmanCard card) => Task.CompletedTask;
     Task OnChainBroken(PlayerChoiceContext context, Cards.BonesmanCard card) => Task.CompletedTask;
+    Task OnDominoPlayed(PlayerChoiceContext context, Cards.BonesmanCard card) => Task.CompletedTask;
 }
 
 // Holds a player's open ends and how many dominoes in a row have Chained. Lives for the combat, so ends persist
@@ -35,6 +36,7 @@ public sealed class ChainPower : KappasTweaksPower
     private int _right = -1;
     private int _links;
     private int _linksThisTurn;
+    private int _breaks;
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
@@ -47,11 +49,12 @@ public sealed class ChainPower : KappasTweaksPower
     public int Right => _right;
     public int Links => _links;
     public int LinksThisTurn => _linksThisTurn;
+    public int Breaks => _breaks;
 
     public bool CanChain(int a, int b, int tolerance = 0, bool always = false) =>
         HasEnds && (always || FindLink(a, b, tolerance) != null);
 
-    public ChainOutcome Place(int a, int b, int tolerance = 0, bool always = false)
+    public ChainOutcome Place(int a, int b, int tolerance = 0, bool always = false, bool keepLinks = false)
     {
         if (!HasEnds)
         {
@@ -62,7 +65,8 @@ public sealed class ChainPower : KappasTweaksPower
         (bool LeftEnd, int Other)? link = FindLink(a, b, tolerance) ?? (always ? (true, b) : null);
         if (link is not var (leftEnd, other))
         {
-            _links = 0;
+            if (!keepLinks) _links = 0;
+            _breaks++;
             SetEnds(a, b);
             return ChainOutcome.Broke;
         }
@@ -79,6 +83,12 @@ public sealed class ChainPower : KappasTweaksPower
     {
         _left = left;
         _right = right;
+        Refresh();
+    }
+
+    public void AddLinks(int count)
+    {
+        _links += count;
         Refresh();
     }
 
