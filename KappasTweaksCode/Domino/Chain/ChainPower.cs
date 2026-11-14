@@ -54,6 +54,14 @@ public sealed class ChainPower : KappasTweaksPower
     public bool CanChain(int a, int b, int tolerance = 0, bool always = false) =>
         HasEnds && (always || FindLink(a, b, tolerance) != null);
 
+    // Which half of a domino (0 = left, 1 = right) would join the chain, or -1.
+    public int LinkingHalf(int a, int b, int tolerance = 0, bool always = false)
+    {
+        if (!HasEnds) return -1;
+        if (FindLink(a, b, tolerance) is var (_, other)) return other == b ? 0 : 1;
+        return always ? 0 : -1;
+    }
+
     public ChainOutcome Place(int a, int b, int tolerance = 0, bool always = false, bool keepLinks = false)
     {
         if (!HasEnds)

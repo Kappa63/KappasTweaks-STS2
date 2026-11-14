@@ -35,6 +35,13 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
     private bool IsJumbled => CanonicalKeywords.Contains(BonesmanKeywords.Jumbled);
     private int Tolerance => CanonicalKeywords.Contains(BonesmanKeywords.Loose) || Owner.Creature.GetPower<LooseBonesPower>() != null ? 1 : 0;
     private bool AlwaysChains => Owner.Creature.GetPower<BoneyardKingPower>() != null;
+    private bool ForcedChain => AlwaysChains || Owner.Creature.GetPower<PerfectMatchPower>() != null || Owner.Creature.GetPower<SafetyNetPower>() != null;
+
+    public static event Action<BonesmanCard>? PipsChanged;
+
+    public int GlowHalf => IsDomino && PipLeft != _unset
+        ? Chain.Of(Owner)?.LinkingHalf(PipLeft, PipRight, Tolerance, ForcedChain) ?? -1
+        : -1;
 
     protected ChainOutcome Outcome { get; private set; }
     private bool HasPips => _pipLeft != _unset;
@@ -80,7 +87,7 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
         IsDomino ? [..CardHoverTips, HoverTipFactory.FromKeyword(BonesmanKeywords.Chained)] : CardHoverTips;
 
     protected override bool ShouldGlowGoldInternal =>
-        IsDomino && PipLeft != _unset && Chain.Of(Owner)?.CanChain(PipLeft, PipRight, Tolerance, AlwaysChains) == true;
+        GlowHalf >= 0;
 
     public override void AfterCreated()
     {
@@ -153,6 +160,7 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
         if (DynamicVars.TryGetValue(PipsKey, out DynamicVar? var) && var is StringVar pips)
             pips.StringValue = PipText;
         OnPipsChanged();
+        PipsChanged?.Invoke(this);
     }
 
     protected decimal Bonus => DynamicVars[BonusKey].BaseValue;
