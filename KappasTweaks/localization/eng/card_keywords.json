@@ -1,3 +1,6 @@
 {
-  
+  "KAPPASTWEAKS-CHAINED.title": "Chained",
+  "KAPPASTWEAKS-CHAINED.description": "When a domino matches one of your open ends, it Chains: its bonus triggers and that end becomes its other pip. Blank (0) matches anything. A domino that matches neither end breaks the chain and its pips become your new open ends.",
+  "KAPPASTWEAKS-JUMBLED.title": "Jumbled",
+  "KAPPASTWEAKS-JUMBLED.description": "This card's pips are rerolled every time it is drawn."
 }

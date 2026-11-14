@@ -4,5 +4,8 @@
   "KAPPASTWEAKS-MODE_SHIFT.smartDescription": "After losing [blue]{Amount}[/blue] HP, the Guardian gains [gold]Block[/gold] and switches to [gold]Defensive Mode[/gold].",
   "KAPPASTWEAKS-SHARP_HIDE.title": "Sharp Hide",
   "KAPPASTWEAKS-SHARP_HIDE.description": "Whenever you play an [gold]Attack[/gold], take [blue]{Amount}[/blue] damage.",
-  "KAPPASTWEAKS-SHARP_HIDE.smartDescription": "Whenever you play an [gold]Attack[/gold], take [blue]{Amount}[/blue] damage."
+  "KAPPASTWEAKS-SHARP_HIDE.smartDescription": "Whenever you play an [gold]Attack[/gold], take [blue]{Amount}[/blue] damage.",
+  "KAPPASTWEAKS-CHAIN_POWER.title": "Chain",
+  "KAPPASTWEAKS-CHAIN_POWER.description": "Your open ends are [gold]{Ends}[/gold]. You have [gold]Chained[/gold] [blue]{Links}[/blue] {Links:plural:domino|dominoes} in a row.",
+  "KAPPASTWEAKS-CHAIN_POWER.smartDescription": "Your open ends are [gold]{Ends}[/gold]. You have [gold]Chained[/gold] [blue]{Links}[/blue] {Links:plural:domino|dominoes} in a row."
 }

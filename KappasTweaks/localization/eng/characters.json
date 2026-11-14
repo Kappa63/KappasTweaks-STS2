@@ -1,3 +1,19 @@
 {
-
+  "KAPPASTWEAKS-BONESMAN.title": "The Bonesman",
+  "KAPPASTWEAKS-BONESMAN.titleObject": "The Bonesman",
+  "KAPPASTWEAKS-BONESMAN.shortTitle": "Bonesman",
+  "KAPPASTWEAKS-BONESMAN.description": "A skeletal gambler who plays his bones like dominoes.\n[gold]Chain[/gold] matching pips to empower your cards.",
+  "KAPPASTWEAKS-BONESMAN.pronounSubject": "he",
+  "KAPPASTWEAKS-BONESMAN.pronounObject": "him",
+  "KAPPASTWEAKS-BONESMAN.possessiveAdjective": "his",
+  "KAPPASTWEAKS-BONESMAN.pronounPossessive": "his",
+  "KAPPASTWEAKS-BONESMAN.goldMonologue": "[sine]Enough to buy back a few of my ribs...[/sine]",
+  "KAPPASTWEAKS-BONESMAN.eventDeathPrevention": "The game isn't over while I've got tiles left.",
+  "KAPPASTWEAKS-BONESMAN.aromaPrinciple": "[sine][purple]Click... clack... every bone in its place...[/purple][/sine]",
+  "KAPPASTWEAKS-BONESMAN.bestiaryQuote": "Haven't matched this one yet.",
+  "KAPPASTWEAKS-BONESMAN.cardsModifierTitle": "Bonesman Cards",
+  "KAPPASTWEAKS-BONESMAN.cardsModifierDescription": "Bonesman cards will now appear in rewards and shops.",
+  "KAPPASTWEAKS-BONESMAN.unlockText": "Play a single run to unlock this character.",
+  "KAPPASTWEAKS-BONESMAN.banter.alive.endTurnPing": "Your move.",
+  "KAPPASTWEAKS-BONESMAN.banter.dead.endTurnPing": "...clack."
 }

@@ -5,5 +5,9 @@
   "KAPPASTWEAKS-KAPPA_THE_ANCIENT.title": "Kappa",
   "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.title": "Kappa's Blitz",
   "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.description": "Remove a [gold]Strike[/gold] and a [gold]Defend[/gold] from your [gold]Deck[/gold]. Choose [blue]5[/blue] cards to add to your [gold]Deck[/gold].",
-  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.prompt": "Choose [blue]5[/blue] cards to add to your [gold]Deck[/gold]."
+  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.prompt": "Choose [blue]5[/blue] cards to add to your [gold]Deck[/gold].",
+  "THE_ARCHITECT.talk.KAPPASTWEAKS-BONESMAN.0-0r.char": "Architect. Every tile I ever drew led here. Let's see if you match.",
+  "THE_ARCHITECT.talk.KAPPASTWEAKS-BONESMAN.0-0r.next": "Continue",
+  "THE_ARCHITECT.talk.KAPPASTWEAKS-BONESMAN.0-1r.ancient": "The pieces were set long before you sat down.",
+  "THE_ARCHITECT.talk.KAPPASTWEAKS-BONESMAN.0-attack": "Both"
 }
