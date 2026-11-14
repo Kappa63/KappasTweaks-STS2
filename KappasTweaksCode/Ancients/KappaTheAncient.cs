@@ -18,7 +18,7 @@ namespace KappasTweaks.KappasTweaksCode.Ancients;
 public class KappaTheAncient : KappasTweaksAncient
 {
     // HYPER
-    private const int _blitzCardChoices = 10;
+    private const int _blitzCardChoices = 15;
     private const int _blitzCardsToPick = 5;
     private const int _blitzStrikesToRemove = 1;
     private const int _blitzDefendsToRemove = 1;
