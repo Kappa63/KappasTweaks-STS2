@@ -2,5 +2,8 @@
   "KAPPASTWEAKS-KAPPA_THE_ANCIENT.epithet": "The Ancient",
   "KAPPASTWEAKS-KAPPA_THE_ANCIENT.talk.ANY.0-0r.ancient": "Yo.",
   "KAPPASTWEAKS-KAPPA_THE_ANCIENT.talk.firstVisitEver.0-0.ancient": "Well.. Well.. Well..",
-  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.title": "Kappa"
+  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.title": "Kappa",
+  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.title": "Kappa's Blitz",
+  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.description": "Remove a [gold]Strike[/gold] and a [gold]Defend[/gold] from your [gold]Deck[/gold]. Choose [blue]5[/blue] cards to add to your [gold]Deck[/gold].",
+  "KAPPASTWEAKS-KAPPA_THE_ANCIENT.pages.INITIAL.options.BLITZ.prompt": "Choose [blue]5[/blue] cards to add to your [gold]Deck[/gold]."
 }
