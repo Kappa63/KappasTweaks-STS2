@@ -2,12 +2,14 @@ using BaseLib.Abstracts;
 using Godot;
 using KappasTweaks.KappasTweaksCode.Domino.Cards;
 using KappasTweaks.KappasTweaksCode.Domino.Relics;
+using KappasTweaks.KappasTweaksCode.Extensions;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
 
 namespace KappasTweaks.KappasTweaksCode.Domino;
 
-// Borrows the Necrobinder's body, map marker, energy orb, rest site and sounds until he has his own art.
+// Each visual uses his own file under images/character/ once it exists, otherwise the Necrobinder's. The body, campfire
+// and merchant poses are plain PNGs; BaseLib turns them into the game's nodes.
 public sealed class Bonesman : PlaceholderCharacterModel
 {
     // HYPER
@@ -25,6 +27,43 @@ public sealed class Bonesman : PlaceholderCharacterModel
     public override int StartingGold => _startingGold;
     public override float AttackAnimDelay => 0.15f;
     public override float CastAnimDelay => 0.4f;
+
+    public override CustomEnergyCounter? CustomEnergyCounter =>
+        new(layer => $"character/energy/layer{layer}.png".ImagePath(), new Color("5A4632"), new Color("FFD68C"));
+    public override Color EnergyLabelOutlineColor => new("5A4632");
+
+    public override string CustomVisualPath => Own("bonesman.png") ?? base.CustomVisualPath;
+    public override string CustomRestSiteAnimPath => Own("bonesman_rest.png") ?? base.CustomRestSiteAnimPath;
+    public override string CustomMerchantAnimPath => Own("bonesman.png") ?? base.CustomMerchantAnimPath;
+    public override string? CustomCharacterSelectIconPath => Own("select.png") ?? base.CustomCharacterSelectIconPath;
+    public override string? CustomCharacterSelectLockedIconPath => Own("select_locked.png") ?? base.CustomCharacterSelectLockedIconPath;
+    public override string? CustomIconTexturePath => Own("icon.png") ?? base.CustomIconTexturePath;
+    public override string? CustomIconOutlineTexturePath => Own("icon_outline.png") ?? base.CustomIconOutlineTexturePath;
+    public override string? CustomMapMarkerPath => Own("map_marker.png") ?? base.CustomMapMarkerPath;
+
+    public override string CustomCharacterSelectBg =>
+        ResourceLoader.Exists(_selectBgScene) ? _selectBgScene : base.CustomCharacterSelectBg;
+
+    // The small icon used in lists (run history, multiplayer): vanilla's is just a TextureRect filling its slot.
+    public override Control? CustomIcon => Own("icon.png") is { } icon
+        ? new TextureRect
+        {
+            Texture = ResourceLoader.Load<Texture2D>(icon),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+            AnchorRight = 1f,
+            AnchorBottom = 1f,
+        }
+        : null;
+
+    private static readonly string _selectBgScene = "character/select_bg.tscn".ScenePath();
+
+    private static string? Own(string file)
+    {
+        string path = $"character/{file}".ImagePath();
+        return ResourceLoader.Exists(path) ? path : null;
+    }
 
     public override CardPoolModel CardPool => ModelDb.CardPool<BonesmanCardPool>();
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<BonesmanRelicPool>();
