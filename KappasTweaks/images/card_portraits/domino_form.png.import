@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cikbgs28sa6to"
-path="res://.godot/imported/boneyard_king.png-4cd05b7220fffd8a8d1294d1ba4f4a11.ctex"
+uid="uid://bnky5gwbouya4"
+path="res://.godot/imported/domino_form.png-b3c4f19e29a6201da0f2b93e784baabe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://KappasTweaks/images/card_portraits/boneyard_king.png"
-dest_files=["res://.godot/imported/boneyard_king.png-4cd05b7220fffd8a8d1294d1ba4f4a11.ctex"]
+source_file="res://KappasTweaks/images/card_portraits/domino_form.png"
+dest_files=["res://.godot/imported/domino_form.png-b3c4f19e29a6201da0f2b93e784baabe.ctex"]
 
 [params]
 

@@ -12,7 +12,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace KappasTweaks.KappasTweaksCode.Domino.Powers;
 
 // Read by BonesmanCard: while this is up, every domino Chains.
-public sealed class BoneyardKingPower : BonesmanPower
+public sealed class DominoFormPower : BonesmanPower
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;

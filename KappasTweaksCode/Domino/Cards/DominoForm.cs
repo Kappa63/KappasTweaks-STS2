@@ -10,7 +10,7 @@ using KappasTweaks.KappasTweaksCode.Domino.Powers;
 namespace KappasTweaks.KappasTweaksCode.Domino.Cards;
 
 [Pool(typeof(BonesmanCardPool))]
-public sealed class BoneyardKing() : BonesmanCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
+public sealed class DominoForm() : BonesmanCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     // HYPER
     private const int _amount = 1;
@@ -19,12 +19,12 @@ public sealed class BoneyardKing() : BonesmanCard(3, CardType.Power, CardRarity.
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new PowerVar<BoneyardKingPower>(_amount),
+        new PowerVar<DominoFormPower>(_amount),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await PowerCmd.Apply<BoneyardKingPower>(choiceContext, Owner.Creature, DynamicVars[nameof(BoneyardKingPower)].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<DominoFormPower>(choiceContext, Owner.Creature, DynamicVars[nameof(DominoFormPower)].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

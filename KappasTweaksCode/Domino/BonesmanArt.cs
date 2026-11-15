@@ -22,7 +22,7 @@ internal static class BonesmanArt
         ["draw"] = "MatchPoint QuickDraw Tally DealOut LayDown BoneDust",
         ["board"] = "CountThePips LinedUp PatientStack LongGame PerfectMatch HedgeBet",
         ["gamble"] = "LoadedBones ShuffleUp AllIn",
-        ["aura"] = "BonePlating ThickSkull SoreLoser BadBeat RigorMortis BoneyardKing Ossuary SteadyHand LooseBones EndlessChain",
+        ["aura"] = "BonePlating ThickSkull SoreLoser BadBeat RigorMortis DominoForm Ossuary SteadyHand LooseBones EndlessChain",
         ["idol"] = "BlankCheck DoubleTrouble LuckyStreak SafetyNet DominoTheory HighRoller PipCounter TwoOfAKind WeightedDice ChainReaction",
     });
 
@@ -40,7 +40,7 @@ internal static class BonesmanArt
     {
         ["armor"] = "BonePlatingPower ThickSkullPower BlankCheckPower OssuaryPower",
         ["flame"] = "SoreLoserPower BadBeatPower RigorMortisPower LuckyStreakPower HighRollerPower ChainReactionPower PipCounterPower",
-        ["link"] = "SafetyNetPower PerfectMatchPower EndlessChainPower LooseBonesPower BoneyardKingPower DominoTheoryPower SteadyHandPower",
+        ["link"] = "SafetyNetPower PerfectMatchPower EndlessChainPower LooseBonesPower DominoFormPower DominoTheoryPower SteadyHandPower",
         ["dice"] = "WeightedDicePower TwoOfAKindPower DoubleTroublePower",
     });
 

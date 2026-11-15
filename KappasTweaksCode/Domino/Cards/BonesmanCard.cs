@@ -34,7 +34,7 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
 
     private bool IsJumbled => CanonicalKeywords.Contains(BonesmanKeywords.Jumbled);
     private int Tolerance => CanonicalKeywords.Contains(BonesmanKeywords.Loose) || Owner.Creature.GetPower<LooseBonesPower>() != null ? 1 : 0;
-    private bool AlwaysChains => Owner.Creature.GetPower<BoneyardKingPower>() != null;
+    private bool AlwaysChains => Owner.Creature.GetPower<DominoFormPower>() != null;
     private bool ForcedChain => AlwaysChains || Owner.Creature.GetPower<PerfectMatchPower>() != null || Owner.Creature.GetPower<SafetyNetPower>() != null;
 
     public static event Action<BonesmanCard>? PipsChanged;
@@ -112,7 +112,7 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
             if (PipLeft == _unset)
                 Roll(Owner.RunState.Rng.CombatCardGeneration);
             ChainPower chain = await Chain.Ensure(choiceContext, Owner);
-            // A forced chain spends a Perfect Match before a Safety Net; Boneyard King forces for free.
+            // A forced chain spends a Perfect Match before a Safety Net; Domino Form forces for free.
             PowerModel? rescue = !chain.HasEnds || chain.CanChain(PipLeft, PipRight, Tolerance, AlwaysChains)
                 ? null
                 : Owner.Creature.GetPower<PerfectMatchPower>() as PowerModel ?? Owner.Creature.GetPower<SafetyNetPower>();
