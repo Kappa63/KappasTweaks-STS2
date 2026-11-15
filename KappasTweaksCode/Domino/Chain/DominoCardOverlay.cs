@@ -32,7 +32,20 @@ internal static class DominoCardOverlay
     [HarmonyPatch(nameof(NCard.UpdateVisuals))]
     private static void AfterUpdateVisuals(NCard __instance) => Sync(__instance);
 
+    // Purely cosmetic, and it runs inside card rendering and combat hooks: it must never throw into the game.
     private static void Sync(NCard card)
+    {
+        try
+        {
+            SyncUnsafe(card);
+        }
+        catch (Exception e)
+        {
+            MainFile.Logger.Error($"Domino tile failed for {card.Model?.Id}: {e}");
+        }
+    }
+
+    private static void SyncUnsafe(NCard card)
     {
         if (!GodotObject.IsInstanceValid(card) || card.Body is not { } body)
             return;

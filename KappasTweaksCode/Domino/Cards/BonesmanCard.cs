@@ -39,7 +39,8 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
 
     public static event Action<BonesmanCard>? PipsChanged;
 
-    public int GlowHalf => IsDomino && PipLeft != _unset
+    // Canonical cards (compendium, previews) have no owner, and asking for one throws.
+    public int GlowHalf => IsMutable && IsDomino && PipLeft != _unset
         ? Chain.Of(Owner)?.LinkingHalf(PipLeft, PipRight, Tolerance, ForcedChain) ?? -1
         : -1;
 

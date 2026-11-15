@@ -25,8 +25,16 @@ internal static class DominoChainUi
     {
         ChainPower.Changed += player =>
         {
-            if (player == _me)
+            if (player != _me)
+                return;
+            try
+            {
                 Refresh(pulse: true);
+            }
+            catch (Exception e)
+            {
+                MainFile.Logger.Error($"Domino chain display failed: {e}");
+            }
         };
     }
 
