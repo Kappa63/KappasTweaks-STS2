@@ -2,6 +2,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -16,6 +17,7 @@ public sealed class BoneyardShuffle() : BonesmanCard(1, CardType.Skill, CardRari
     private const int _cardsUpgrade = 1;
 
     protected override bool IsDomino => false;
+    protected override IEnumerable<IHoverTip> CardHoverTips => [HoverTipFactory.FromCard<BoneChip>()];
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
@@ -25,7 +27,7 @@ public sealed class BoneyardShuffle() : BonesmanCard(1, CardType.Skill, CardRari
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
         await Draw(choiceContext, DynamicVars.Cards.BaseValue);
-        (await Chain.Ensure(choiceContext, Owner)).SetEnds(ChainPower.Blank, ChainPower.Blank);
+        await AddChips(1);
     }
 
     protected override void OnUpgrade()

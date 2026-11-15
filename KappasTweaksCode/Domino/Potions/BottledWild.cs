@@ -12,7 +12,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace KappasTweaks.KappasTweaksCode.Domino.Potions;
 
 [Pool(typeof(BonesmanPotionPool))]
-public sealed class BottledBlank : KappasTweaksPotion
+public sealed class BottledWild : KappasTweaksPotion
 {
     // HYPER
     private const int _cards = 2;
@@ -24,7 +24,7 @@ public sealed class BottledBlank : KappasTweaksPotion
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)
     {
-        (await Chain.Ensure(choiceContext, Owner)).SetEnds(ChainPower.Blank, ChainPower.Blank);
+        (await Chain.Ensure(choiceContext, Owner)).SetEnds(ChainPower.Wild, ChainPower.Wild);
         await CardPileCmd.Draw(choiceContext, _cards, Owner);
     }
 }

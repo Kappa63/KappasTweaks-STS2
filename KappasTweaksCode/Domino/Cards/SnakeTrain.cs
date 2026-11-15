@@ -14,19 +14,19 @@ public sealed class SnakeTrain() : BonesmanCard(2, CardType.Attack, CardRarity.R
     // HYPER
     private const int _damage = 5;
     private const int _damageUpgrade = 2;
+    private const string _hitsKey = "Hits";
 
     protected override (int Left, int Right)? FixedPips => (1, 6);
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
         new DamageVar(_damage, ValueProp.Move),
+        new LiveVar(_hitsKey, c => Math.Max(1, c.ChainCount)),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        int hits = Math.Max(1, Chain.Of(Owner)?.Links ?? 0);
-        for (int i = 0; i < hits; i++)
-            await HitAll(choiceContext, play, DynamicVars.Damage.BaseValue);
+        await HitAll(choiceContext, play, DynamicVars.Damage.BaseValue, (int)((LiveVar)DynamicVars[_hitsKey]).Of(this));
     }
 
     protected override void OnUpgrade()

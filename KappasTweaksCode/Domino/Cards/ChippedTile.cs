@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KappasTweaks.KappasTweaksCode.Domino.Cards;
 
-// Dingy Dagger for dominoes: upgrades forever, renamed and repainted at +3 and +6. Blank pips, so it chains anywhere.
+// Dingy Dagger for dominoes: upgrades forever, renamed and repainted at +3 and +6. Blank pips.
 [Pool(typeof(BonesmanCardPool))]
 public sealed class ChippedTile() : BonesmanCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {

@@ -21,19 +21,19 @@ public sealed class DominoEffect() : BonesmanCard(1, CardType.Attack, CardRarity
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _perLink),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_perLink),
+        ScaledDamage(c => c.WillChain ? c.ChainCount : 0),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        int links = chained ? Chain.Of(Owner)?.Links ?? 0 : 0;
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + Bonus * links);
+        await HitScaled(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
-        DynamicVars[BonusKey].UpgradeValueBy(_perLinkUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.ExtraDamage.UpgradeValueBy(_perLinkUpgrade);
     }
 }

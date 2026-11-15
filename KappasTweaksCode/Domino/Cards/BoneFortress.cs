@@ -20,19 +20,18 @@ public sealed class BoneFortress() : BonesmanCard(2, CardType.Skill, CardRarity.
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new BlockVar(_block, ValueProp.Move),
-        new IntVar(BonusKey, _perLink),
+        new CalculationBaseVar(_block),
+        new CalculationExtraVar(_perLink),
+        ScaledBlock(c => c.WillChain ? c.ChainCount : 0),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Block(play, DynamicVars.Block.BaseValue);
-        if (chained)
-            await Block(play, Bonus * (Chain.Of(Owner)?.Links ?? 0));
+        await Block(play, ScaledBlockValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(_blockUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_blockUpgrade);
     }
 }

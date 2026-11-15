@@ -20,17 +20,18 @@ public sealed class DeathRattle() : BonesmanCard(1, CardType.Attack, CardRarity.
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_bonus),
+        ScaledDamage(c => c.BreakCount),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await HitAll(choiceContext, play, DynamicVars.Damage.BaseValue + Bonus * (Chain.Of(Owner)?.Breaks ?? 0));
+        await HitAllScaled(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars[BonusKey].UpgradeValueBy(_bonusUpgrade);
+        DynamicVars.ExtraDamage.UpgradeValueBy(_bonusUpgrade);
     }
 }

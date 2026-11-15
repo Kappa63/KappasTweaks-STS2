@@ -19,18 +19,19 @@ public sealed class LastTile() : BonesmanCard(1, CardType.Attack, CardRarity.Rar
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new IntVar(BonusKey, _perLink),
+        new CalculationBaseVar(0),
+        new ExtraDamageVar(_perLink),
+        ScaledDamage(c => Math.Max(1, c.ChainCount)),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        ChainPower chain = await Chain.Ensure(choiceContext, Owner);
-        await Hit(choiceContext, play, Bonus * Math.Max(1, chain.Links));
-        chain.ResetLinks();
+        await HitScaled(choiceContext, play);
+        await BreakChain(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars[BonusKey].UpgradeValueBy(_perLinkUpgrade);
+        DynamicVars.ExtraDamage.UpgradeValueBy(_perLinkUpgrade);
     }
 }

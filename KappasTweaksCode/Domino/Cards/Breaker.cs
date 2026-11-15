@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace KappasTweaks.KappasTweaksCode.Domino.Cards;
 
 [Pool(typeof(BonesmanCardPool))]
-public sealed class Breaker() : BonesmanCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public sealed class Breaker() : BonesmanCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     // HYPER
     private const int _damage = 12;
@@ -20,17 +20,18 @@ public sealed class Breaker() : BonesmanCard(1, CardType.Attack, CardRarity.Unco
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_bonus),
+        ScaledDamage(c => c.WillBreak ? 1 : 0),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + (Outcome == ChainOutcome.Broke ? Bonus : 0));
+        await HitScaled(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_damageUpgrade);
     }
 }

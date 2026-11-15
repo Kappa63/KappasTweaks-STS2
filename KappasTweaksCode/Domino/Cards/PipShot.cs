@@ -20,19 +20,21 @@ public sealed class PipShot() : BonesmanCard(1, CardType.Attack, CardRarity.Comm
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new IntVar(BonusKey, _flat),
+        new CalculationBaseVar(_flat),
+        new ExtraDamageVar(1),
+        ScaledDamage(c => c.PipValue),
         new CardsVar(_cards),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, PipTotal + Bonus);
+        await HitScaled(choiceContext, play);
         if (chained)
             await Draw(choiceContext, DynamicVars.Cards.BaseValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars[BonusKey].UpgradeValueBy(_flatUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_flatUpgrade);
     }
 }

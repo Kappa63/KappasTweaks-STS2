@@ -11,19 +11,19 @@ internal static class BonesmanArt
 {
     private static readonly Dictionary<string, string> _cardFamilies = Invert(new()
     {
-        ["swing"] = "StrikeBonesman Bonecrusher BoneSaw Clatter Breaker TwinSpin Endgame LastTile",
-        ["fist"] = "Knucklebone Clack BlankStare ColdRead BoxedIn FemurFling HotStreak NearMiss OddManOut EvenOdds",
+        ["swing"] = "StrikeBonesman Bonecrusher BoneSaw Breaker TwinSpin Endgame LastTile",
+        ["fist"] = "Knucklebone Clack ColdRead BoxedIn FemurFling HotStreak NearMiss OddManOut EvenOdds",
         ["throw"] = "TileToss PipShot SnakeEyes LongChain FullHouse BoneStorm",
         ["topple"] = "DominoEffect FaultLine CleanSweep PipStorm Topple DeathRattle SnakeTrain DominoAvalanche",
         ["double"] = "DoubleSix Boxcars SetPiece DoubleBack DoublingDown",
-        ["blank"] = "BlankSlate Wildcard BoneyardShuffle ResetTheBoard ChippedTile",
+        ["blank"] = "Joker Wildcard BoneyardShuffle ResetTheBoard ChippedTile BoneChip ScatterBones",
         ["bone_arm"] = "DefendBonesman Harden Ossify BobAndWeave Feint Stall OssifiedHide",
-        ["bone_wall"] = "BoneWall BoneCage RibCage BoneWard BoneFortress Insurance",
-        ["draw"] = "MatchPoint QuickDraw Tally DealOut LayDown BoneDust",
-        ["board"] = "CountThePips LinedUp PatientStack LongGame PerfectMatch HedgeBet",
-        ["gamble"] = "LoadedBones ShuffleUp AllIn",
-        ["aura"] = "BonePlating ThickSkull SoreLoser BadBeat RigorMortis DominoForm Ossuary SteadyHand LooseBones EndlessChain",
-        ["idol"] = "BlankCheck DoubleTrouble LuckyStreak SafetyNet DominoTheory HighRoller PipCounter TwoOfAKind WeightedDice ChainReaction",
+        ["bone_wall"] = "BoneWall BoneCage RibCage BoneWard BoneFortress Insurance BlankStare",
+        ["draw"] = "MatchPoint QuickDraw Tally DealOut LayDown BoneDust MarrowFeast",
+        ["board"] = "DoubleUp LinedUp PatientStack LongGame PerfectMatch HedgeBet",
+        ["gamble"] = "LoadedBones MirrorMatch AllIn",
+        ["aura"] = "BonePlating ThickSkull SoreLoser BadBeat BoneCollector DominoForm Ossuary SteadyHand LooseBones EndlessChain",
+        ["idol"] = "BlankCheck DoubleTrouble LuckyStreak SafetyNet DominoTheory HighRoller BonePile TwoOfAKind ChainReaction",
     });
 
     // Vanilla art borrowed per family until the family image exists. Read from the game's own files, never copied.
@@ -38,8 +38,8 @@ internal static class BonesmanArt
 
     private static readonly Dictionary<string, string> _powerFamilies = Invert(new()
     {
-        ["armor"] = "BonePlatingPower ThickSkullPower BlankCheckPower OssuaryPower",
-        ["flame"] = "SoreLoserPower BadBeatPower RigorMortisPower LuckyStreakPower HighRollerPower ChainReactionPower PipCounterPower",
+        ["armor"] = "BonePlatingPower ThickSkullPower BlankCheckPower OssuaryPower BonePilePower",
+        ["flame"] = "SoreLoserPower BadBeatPower BoneCollectorPower LuckyStreakPower HighRollerPower ChainReactionPower",
         ["link"] = "SafetyNetPower PerfectMatchPower EndlessChainPower LooseBonesPower DominoFormPower DominoTheoryPower SteadyHandPower",
         ["dice"] = "WeightedDicePower TwoOfAKindPower DoubleTroublePower",
     });

@@ -22,17 +22,18 @@ public sealed class StrikeBonesman() : BonesmanCard(1, CardType.Attack, CardRari
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_bonus),
+        ScaledDamage(c => c.WillChain ? 1 : 0),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + (chained ? Bonus : 0));
+        await HitScaled(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_damageUpgrade);
     }
 }

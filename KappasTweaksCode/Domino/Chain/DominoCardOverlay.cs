@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Entities.Cards;
 using Godot;
 using HarmonyLib;
 using KappasTweaks.KappasTweaksCode.Domino.Cards;
@@ -51,6 +52,8 @@ internal static class DominoCardOverlay
             return;
 
         Control? tile = body.GetNodeOrNull<Control>(_nodeName);
+        if (card.Model is BonesmanCard && !_shown.Any(r => r.TryGetTarget(out NCard? known) && known == card))
+            _shown.Add(new WeakReference<NCard>(card));
         if (card.Model is not BonesmanCard { Domino: true } domino)
         {
             tile?.QueueFree();
@@ -62,18 +65,29 @@ internal static class DominoCardOverlay
             tile = DominoTile.Create(_half, vertical: true, _nodeName);
             tile.Position = _position;
             body.AddChild(tile);
-            _shown.Add(new WeakReference<NCard>(card));
         }
         DominoTile.Set(tile, domino.PipLeft, domino.PipRight, domino.GlowHalf);
     }
 
+    // Cards in hand redraw fully so their numbers follow the chain; the redraw re-syncs the tile through the postfix.
     private static void RefreshAll(BonesmanCard? only = null)
     {
         _shown.RemoveAll(r => !r.TryGetTarget(out NCard? card) || !GodotObject.IsInstanceValid(card));
         foreach (WeakReference<NCard> reference in _shown.ToList())
         {
-            if (reference.TryGetTarget(out NCard? card) && (only == null || card.Model == only))
-                Sync(card);
+            if (!reference.TryGetTarget(out NCard? card) || (only != null && card.Model != only))
+                continue;
+            try
+            {
+                if (card.DisplayingPile == PileType.Hand && card.Model is BonesmanCard)
+                    card.UpdateVisuals(PileType.Hand, CardPreviewMode.Normal);
+                else
+                    Sync(card);
+            }
+            catch (Exception e)
+            {
+                MainFile.Logger.Error($"Card refresh failed for {card.Model?.Id}: {e}");
+            }
         }
     }
 }

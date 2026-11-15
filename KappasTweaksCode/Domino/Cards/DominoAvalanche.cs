@@ -20,19 +20,18 @@ public sealed class DominoAvalanche() : BonesmanCard(3, CardType.Attack, CardRar
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_bonus),
+        ScaledDamage(c => c.WillChain ? 1 : 0),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + (chained ? Bonus : 0));
-        if (chained)
-            (await Chain.Ensure(choiceContext, Owner)).SetEnds(ChainPower.Blank, ChainPower.Blank);
+        await HitScaled(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_damageUpgrade);
     }
 }

@@ -10,6 +10,7 @@ internal static class DominoTile
     private static readonly Color _bone = new("EFE6CF");
     private static readonly Color _gold = new("F2C94C");
     private static readonly Color _ink = new("2A2420");
+    private static readonly Color _wild = new("7A3FB0");
     private static readonly ConditionalWeakTable<Control, Parts> _parts = new();
 
     private sealed class Parts
@@ -17,6 +18,7 @@ internal static class DominoTile
         public readonly Panel[] Halves = new Panel[2];
         public readonly List<Control>[] Pips = [[], []];
         public readonly Label[] Unknown = new Label[2];
+        public readonly Polygon2D[] Stars = new Polygon2D[2];
     }
 
     public static Control Create(float size, bool vertical, string name)
@@ -64,6 +66,10 @@ internal static class DominoTile
             unknown.AddThemeFontSizeOverride("font_size", (int)(size * 0.6f));
             root.AddChild(unknown);
             parts.Unknown[half] = unknown;
+
+            Polygon2D star = new() { Color = _wild, Position = offset + new Vector2(size / 2, size / 2), Polygon = Star(size * 0.4f) };
+            root.AddChild(star);
+            parts.Stars[half] = star;
         }
 
         ColorRect divider = new()
@@ -107,9 +113,18 @@ internal static class DominoTile
 
             int value = values[half];
             parts.Unknown[half].Visible = value < 0;
+            parts.Stars[half].Visible = value == ChainPower.Wild;
             for (int i = 0; i < _spots.Length; i++)
-                parts.Pips[half][i].Visible = value >= 0 && _faces[value].Contains(i);
+                parts.Pips[half][i].Visible = value is >= 0 and <= ChainPower.MaxPip && _faces[value].Contains(i);
         }
+    }
+
+    private static Vector2[] Star(float radius)
+    {
+        Vector2[] points = new Vector2[10];
+        for (int i = 0; i < 10; i++)
+            points[i] = Vector2.FromAngle(-Mathf.Pi / 2 + i * Mathf.Pi / 5) * (i % 2 == 0 ? radius : radius * 0.45f);
+        return points;
     }
 
     private static StyleBoxFlat Box(Color color, float radius)

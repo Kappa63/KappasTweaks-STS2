@@ -18,9 +18,9 @@ public sealed class OssuaryPower : BonesmanPower
 
     public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
-        if (side != Owner.Side || Chain.Of(Owner.Player) is not { Links: > 0 } chain)
+        if (side != Owner.Side || Chain.Of(Owner.Player) is not { LinksThisTurn: > 0 } chain)
             return;
         Flash();
-        await CreatureCmd.GainBlock(Owner, Amount * chain.Links, ValueProp.Unpowered, null);
+        await CreatureCmd.GainBlock(Owner, Amount * chain.LinksThisTurn, ValueProp.Unpowered, null);
     }
 }

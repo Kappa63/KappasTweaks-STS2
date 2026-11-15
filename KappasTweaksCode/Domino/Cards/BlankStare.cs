@@ -1,36 +1,41 @@
 using BaseLib.Utils;
+using KappasTweaks.KappasTweaksCode.Domino.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KappasTweaks.KappasTweaksCode.Domino.Cards;
 
+// Breaker: cash the streak in for Block.
 [Pool(typeof(BonesmanCardPool))]
-public sealed class BlankStare() : BonesmanCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public sealed class BlankStare() : BonesmanCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     // HYPER
-    private const int _damage = 10;
-    private const int _damageUpgrade = 3;
-    private const int _bonus = 2;
+    private const int _block = 4;
+    private const int _blockUpgrade = 3;
+    private const int _perLink = 2;
 
-    protected override (int Left, int Right)? FixedPips => (0, 4);
+    protected override bool IsDomino => false;
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_block),
+        new CalculationExtraVar(_perLink),
+        ScaledBlock(c => c.ChainCount),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + (chained ? Bonus : 0));
+        await Block(play, ScaledBlockValue);
+        await BreakChain(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_blockUpgrade);
     }
 }

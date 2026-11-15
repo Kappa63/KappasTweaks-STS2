@@ -13,7 +13,7 @@ namespace KappasTweaks.KappasTweaksCode.Domino.Cards;
 public sealed class Ossuary() : BonesmanCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     // HYPER
-    private const int _amount = 2;
+    private const int _amount = 3;
 
     protected override bool IsDomino => false;
 

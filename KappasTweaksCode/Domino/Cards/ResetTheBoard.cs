@@ -2,6 +2,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -16,6 +17,7 @@ public sealed class ResetTheBoard() : BonesmanCard(1, CardType.Skill, CardRarity
     private const int _cardsUpgrade = 1;
 
     protected override bool IsDomino => false;
+    protected override IEnumerable<IHoverTip> CardHoverTips => [HoverTipFactory.FromKeyword(BonesmanKeywords.Wild)];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -28,7 +30,7 @@ public sealed class ResetTheBoard() : BonesmanCard(1, CardType.Skill, CardRarity
     {
         await CardPileCmd.Shuffle(choiceContext, Owner);
         await Draw(choiceContext, DynamicVars.Cards.BaseValue);
-        (await Chain.Ensure(choiceContext, Owner)).SetEnds(ChainPower.Blank, ChainPower.Blank);
+        (await Chain.Ensure(choiceContext, Owner)).SetEnds(ChainPower.Wild, ChainPower.Wild);
     }
 
     protected override void OnUpgrade()

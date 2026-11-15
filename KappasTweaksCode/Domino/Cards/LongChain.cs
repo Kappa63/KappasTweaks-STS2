@@ -21,18 +21,19 @@ public sealed class LongChain() : BonesmanCard(2, CardType.Attack, CardRarity.Un
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _perLink),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_perLink),
+        ScaledDamage(c => c.ChainCount),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + Bonus * (Chain.Of(Owner)?.Links ?? 0));
+        await HitScaled(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
-        DynamicVars[BonusKey].UpgradeValueBy(_perLinkUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.ExtraDamage.UpgradeValueBy(_perLinkUpgrade);
     }
 }

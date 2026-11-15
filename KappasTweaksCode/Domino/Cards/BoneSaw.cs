@@ -21,20 +21,21 @@ public sealed class BoneSaw() : BonesmanCard(2, CardType.Attack, CardRarity.Comm
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new DamageVar(_damage, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_damage),
+        new ExtraDamageVar(_bonus),
+        ScaledDamage(c => c.WillChain ? 1 : 0),
         new CardsVar(_cards),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Hit(choiceContext, play, DynamicVars.Damage.BaseValue + (chained ? Bonus : 0));
+        await HitScaled(choiceContext, play);
         if (chained)
             await Draw(choiceContext, DynamicVars.Cards.BaseValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(_damageUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_damageUpgrade);
     }
 }

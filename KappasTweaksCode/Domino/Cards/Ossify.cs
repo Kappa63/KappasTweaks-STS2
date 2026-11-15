@@ -20,17 +20,18 @@ public sealed class Ossify() : BonesmanCard(0, CardType.Skill, CardRarity.Common
 
     protected override IEnumerable<DynamicVar> CardVars =>
     [
-        new BlockVar(_block, ValueProp.Move),
-        new IntVar(BonusKey, _bonus),
+        new CalculationBaseVar(_block),
+        new CalculationExtraVar(_bonus),
+        ScaledBlock(c => c.WillChain ? 1 : 0),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        await Block(play, DynamicVars.Block.BaseValue + (chained ? Bonus : 0));
+        await Block(play, ScaledBlockValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(_blockUpgrade);
+        DynamicVars.CalculationBase.UpgradeValueBy(_blockUpgrade);
     }
 }

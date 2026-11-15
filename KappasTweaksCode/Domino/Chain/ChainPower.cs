@@ -27,6 +27,8 @@ public sealed class ChainPower : KappasTweaksPower
 {
     public const int Blank = 0;
     public const int MaxPip = 6;
+    // Never rolled: only Bone Box, a few rare cards and Bottled Wild make one. Matches any pip.
+    public const int Wild = 7;
     private const string _endsKey = "Ends";
     private const string _linksKey = "Links";
 
@@ -37,9 +39,10 @@ public sealed class ChainPower : KappasTweaksPower
     private int _links;
     private int _linksThisTurn;
     private int _breaks;
+    private int _chipsPlayed;
 
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
+    public override PowerStackType StackType => PowerStackType.Counter;
     public override int DisplayAmount => _links;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new StringVar(_endsKey, "-"), new IntVar(_linksKey, 0)];
@@ -50,6 +53,9 @@ public sealed class ChainPower : KappasTweaksPower
     public int Links => _links;
     public int LinksThisTurn => _linksThisTurn;
     public int Breaks => _breaks;
+    public int ChipsPlayed => _chipsPlayed;
+
+    public static string PipName(int pip) => pip == Wild ? "★" : pip.ToString();
 
     public bool CanChain(int a, int b, int tolerance = 0, bool always = false) =>
         HasEnds && (always || FindLink(a, b, tolerance) != null);
@@ -106,6 +112,16 @@ public sealed class ChainPower : KappasTweaksPower
         Refresh();
     }
 
+    // Breaking on purpose always costs the streak, Endless Chain or not.
+    public void Break()
+    {
+        _links = 0;
+        _breaks++;
+        Refresh();
+    }
+
+    public void ChipPlayed() => _chipsPlayed++;
+
     public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player == Owner.Player)
@@ -113,7 +129,7 @@ public sealed class ChainPower : KappasTweaksPower
         return Task.CompletedTask;
     }
 
-    // Exact matches win over blanks, and blanks over near-misses, so the most flexible end is spent last.
+    // Exact matches win over wilds, and wilds over near-misses, so the most flexible end is spent last.
     private (bool LeftEnd, int Other)? FindLink(int a, int b, int tolerance)
     {
         for (int pass = 0; pass < 3; pass++)
@@ -129,13 +145,13 @@ public sealed class ChainPower : KappasTweaksPower
     private static bool Fits(int end, int pip, int pass, int tolerance) => pass switch
     {
         0 => end == pip,
-        1 => end == Blank || pip == Blank,
-        _ => Math.Abs(end - pip) <= tolerance,
+        1 => end == Wild || pip == Wild,
+        _ => end != Wild && pip != Wild && Math.Abs(end - pip) <= tolerance,
     };
 
     private void Refresh()
     {
-        ((StringVar)DynamicVars[_endsKey]).StringValue = HasEnds ? $"{_left} | {_right}" : "-";
+        ((StringVar)DynamicVars[_endsKey]).StringValue = HasEnds ? $"{PipName(_left)} | {PipName(_right)}" : "-";
         DynamicVars[_linksKey].BaseValue = _links;
         InvokeDisplayAmountChanged();
         if (Owner?.Player is { } player)

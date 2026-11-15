@@ -14,6 +14,7 @@ public sealed class AllIn() : BonesmanCard(0, CardType.Skill, CardRarity.Rare, T
     // HYPER
     private const int _per = 3;
     private const int _perUpgrade = -1;
+    private const string _gainKey = "Gain";
 
     protected override bool IsDomino => false;
 
@@ -22,11 +23,12 @@ public sealed class AllIn() : BonesmanCard(0, CardType.Skill, CardRarity.Rare, T
     protected override IEnumerable<DynamicVar> CardVars =>
     [
         new IntVar(BonusKey, _per),
+        new LiveVar(_gainKey, c => c.ChainCount / c.DynamicVars[BonusKey].IntValue),
     ];
 
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
-        int energy = (Chain.Of(Owner)?.Links ?? 0) / (int)Bonus;
+        int energy = (int)((LiveVar)DynamicVars[_gainKey]).Of(this);
         if (energy > 0)
             await PlayerCmd.GainEnergy(energy, Owner);
     }

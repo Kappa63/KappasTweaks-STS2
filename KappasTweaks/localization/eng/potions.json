@@ -5,8 +5,8 @@
   "KAPPASTWEAKS-SMOKE_BOMB.description": "Escape from a non-[gold]Boss[/gold] [gold]Combat[/gold]. Receive no rewards.",
   "KAPPASTWEAKS-LIQUID_MARROW.title": "Liquid Marrow",
   "KAPPASTWEAKS-LIQUID_MARROW.description": "Gain [blue]{PerLink}[/blue] [gold]Block[/gold] for each domino in your [gold]Chain[/gold] (at least {Block}).",
-  "KAPPASTWEAKS-BOTTLED_BLANK.title": "Bottled Blank",
-  "KAPPASTWEAKS-BOTTLED_BLANK.description": "Your open ends become [gold]0 | 0[/gold].\nDraw {Cards} cards.",
   "KAPPASTWEAKS-SNAKE_OIL.title": "Snake Oil",
-  "KAPPASTWEAKS-SNAKE_OIL.description": "This turn, the next [blue]{Chains}[/blue] dominoes that would break the chain [gold]Chain[/gold] instead."
+  "KAPPASTWEAKS-SNAKE_OIL.description": "This turn, the next [blue]{Chains}[/blue] dominoes that would break the chain [gold]Chain[/gold] instead.",
+  "KAPPASTWEAKS-BOTTLED_WILD.title": "Bottled Wild",
+  "KAPPASTWEAKS-BOTTLED_WILD.description": "Your open ends become [gold]★ | ★[/gold].\nDraw {Cards} cards."
 }

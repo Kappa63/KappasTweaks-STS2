@@ -1,8 +1,10 @@
 {
   "KAPPASTWEAKS-CHAINED.title": "Chained",
-  "KAPPASTWEAKS-CHAINED.description": "When a domino matches one of your open ends, it Chains: its bonus triggers and that end becomes its other pip. Blank (0) matches anything. A domino that matches neither end breaks the chain and its pips become your new open ends.",
+  "KAPPASTWEAKS-CHAINED.description": "When a domino matches one of your open ends, it Chains: its bonus triggers and that end becomes its other pip. A domino that matches neither end breaks the chain: your streak resets and its pips become your new open ends.",
   "KAPPASTWEAKS-JUMBLED.title": "Jumbled",
   "KAPPASTWEAKS-JUMBLED.description": "This card's pips are rerolled every time it is drawn.",
   "KAPPASTWEAKS-LOOSE.title": "Loose",
-  "KAPPASTWEAKS-LOOSE.description": "This domino also [gold]Chains[/gold] with open ends 1 higher or lower."
+  "KAPPASTWEAKS-LOOSE.description": "This domino also [gold]Chains[/gold] with open ends 1 higher or lower.",
+  "KAPPASTWEAKS-WILD.title": "Wild",
+  "KAPPASTWEAKS-WILD.description": "A [gold]★[/gold] pip matches any number. An open end showing [gold]★[/gold] accepts any domino."
 }

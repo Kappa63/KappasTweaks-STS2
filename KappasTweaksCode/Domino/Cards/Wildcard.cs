@@ -2,6 +2,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -16,6 +17,7 @@ public sealed class Wildcard() : BonesmanCard(0, CardType.Skill, CardRarity.Unco
     private const int _cardsUpgrade = 1;
 
     protected override bool IsDomino => false;
+    protected override IEnumerable<IHoverTip> CardHoverTips => [HoverTipFactory.FromKeyword(BonesmanKeywords.Wild)];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -27,7 +29,7 @@ public sealed class Wildcard() : BonesmanCard(0, CardType.Skill, CardRarity.Unco
     protected override async Task OnDominoPlay(PlayerChoiceContext choiceContext, CardPlay play, bool chained)
     {
         ChainPower chain = await Chain.Ensure(choiceContext, Owner);
-        chain.SetEnds(ChainPower.Blank, chain.HasEnds ? chain.Right : ChainPower.Blank);
+        chain.SetEnds(ChainPower.Wild, chain.HasEnds ? chain.Right : ChainPower.Wild);
         await Draw(choiceContext, DynamicVars.Cards.BaseValue);
     }
 
