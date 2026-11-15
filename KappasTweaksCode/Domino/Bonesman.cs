@@ -11,7 +11,9 @@ using MegaCrit.Sts2.Core.Nodes.Combat;
 namespace KappasTweaks.KappasTweaksCode.Domino;
 
 // Each visual uses his own file under images/character/ once it exists, otherwise the Necrobinder's. The game loads the
-// campfire and merchant poses as scenes, so those are tiny scenes wrapping the PNGs; the combat body is built in code.
+// campfire pose as a scene whose root is already its own node type, so nothing needs converting; the combat body is
+// built in code. The game's merchant code insists on a Spine animation as its first child, so the merchant scene carries
+// the Necrobinder's hidden and shows his image on top.
 public sealed class Bonesman : PlaceholderCharacterModel
 {
     // HYPER

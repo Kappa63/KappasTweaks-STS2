@@ -113,7 +113,8 @@ public abstract class BonesmanCard(int cost, CardType type, CardRarity rarity, T
     public override void AfterCreated()
     {
         base.AfterCreated();
-        if (Rolled && !HasPips)
+        // Jumbled cards made straight into a pile never get drawn, so they need pips from the start.
+        if ((Rolled || IsJumbled) && !HasPips)
             Roll(Owner.RunState.Rng.Niche);
     }
 
